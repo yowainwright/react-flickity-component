@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM, { createPortal } from 'react-dom';
+import { createPortal } from 'react-dom';
 import Flickity from 'flickity';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import imagesloaded from 'imagesloaded';
@@ -51,12 +51,10 @@ class FlickityComponent extends Component {
       if (disableImagesLoaded) {
         this.setState({ flickityReady: true });
       } else {
-        const flickityEl = ReactDOM.findDOMNode(this);
-        const images = [].forEach.call(flickityEl);
-        if (images.length > 0) {
-          imagesloaded(
+        const setFlickityToReady = () => this.setState({ flickityReady: true });
+        imagesloaded(
             carousel,
-            function () { this.setState({ flickityReady: true }).bind(this)
+            setFlickityToReady()
           );
         }
       }
