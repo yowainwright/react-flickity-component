@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 import Flickity from 'flickity';
-import imagesloaded from 'imagesloaded';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+import imagesloaded from 'imagesloaded';
 import PropTypes from 'prop-types';
 
 class FlickityComponent extends Component {
@@ -15,58 +15,52 @@ class FlickityComponent extends Component {
 
     this.carousel = null;
     this.flkty = null;
-    this.imagesLoaded = this.imagesLoaded.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      this.props.reloadOnUpdate ||
-      (!prevState.flickityReady && this.state.flickityReady)
-    ) {
+    const {
+      children,
+      options: { draggable, initialIndex },
+      reloadOnUpdate,
+    } = this.props;
+    console.log('ham', this.props, this.state, this.flkty);
+    const { flickityReady } = this.state;
+    if (reloadOnUpdate || (!prevState.flickityReady && flickityReady)) {
+      console.log('ham', 'check 1');
       this.flkty.deactivate();
-      this.flkty.selectedIndex = this.props.options.initialIndex || 0;
+      this.flkty.selectedIndex = initialIndex || 0;
       this.flkty.options.draggable =
-        this.props.options.draggable === undefined
-          ? this.props.children
-            ? this.props.children.length > 1
+        draggable === undefined
+          ? children
+            ? children.length > 1
             : false
-          : this.props.options.draggable;
-      imagesloaded(
-        this.carousel,
-        function(instance) {
-          this.flkty.activate();
-        }.bind(this)
-      );
-    }
-    this.imagesLoaded();
-  }
-
-  imagesLoaded() {
-    if (!this.props.disableImagesLoaded && canUseDOM) {
-      imagesloaded(
-        this.carousel,
-        function(instance) {
-          this.flkty.reloadCells();
-        }.bind(this)
-      );
+          : draggable;
+      this.flkty.activate();
+    } else {
+      console.log('ham', 'check 2');
+      this.flkty.reloadCells();
     }
   }
 
   componentDidMount() {
-    const carousel = this.carousel;
     if (canUseDOM) {
-      this.flkty = new Flickity(carousel, this.props.options);
-      this.setState({ flickityReady: true });
-      if (this.props.flickityRef) {
-        this.props.flickityRef(this.flkty);
+      const { disableImagesLoaded, flickityRef, options } = this.props;
+      const carousel = this.carousel;
+      this.flkty = new Flickity(carousel, options);
+      console.log('ham', this.flkty);
+      if (disableImagesLoaded) {
+        this.setState({ flickityReady: true });
+      } else {
+        const setFlickityToReady = () => this.setState({ flickityReady: true });
+        imagesloaded(carousel, setFlickityToReady);
       }
+      if (flickityRef) flickityRef(this.flkty);
     }
   }
 
   renderPortal() {
-    if (!this.carousel) {
-      return null;
-    }
+    if (!this.carousel) return null;
+
     const mountNode = this.carousel.querySelector('.flickity-slider');
     if (mountNode) {
       return createPortal(this.props.children, mountNode);
