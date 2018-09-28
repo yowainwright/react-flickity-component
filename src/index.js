@@ -52,11 +52,7 @@ class FlickityComponent extends Component {
         this.setState({ flickityReady: true });
       } else {
         const setFlickityToReady = () => this.setState({ flickityReady: true });
-        imagesloaded(
-            carousel,
-            setFlickityToReady()
-          );
-        }
+        imagesloaded(carousel, setFlickityToReady);
       }
       if (flickityRef) flickityRef(this.flkty);
     }
