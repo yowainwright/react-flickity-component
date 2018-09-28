@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createPortal } from 'react-dom';
+import ReactDOM, { createPortal } from 'react-dom';
 import Flickity from 'flickity';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import imagesloaded from 'imagesloaded';
