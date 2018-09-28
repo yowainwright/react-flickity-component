@@ -54,7 +54,10 @@ class FlickityComponent extends Component {
         const flickityEl = ReactDOM.findDOMNode(this);
         const images = [].forEach.call(flickityEl);
         if (images.length > 0) {
-          imagesloaded(carousel, () => this.setState({ flickityReady: true }));
+          imagesloaded(
+            carousel,
+            function () { this.setState({ flickityReady: true }).bind(this)
+          );
         }
       }
       if (flickityRef) flickityRef(this.flkty);
