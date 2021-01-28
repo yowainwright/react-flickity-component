@@ -5,7 +5,7 @@
   "dependencies": {
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-flickity-component": "^3.6.0",
+    "react-flickity-component": "^3.6.1",
     "react-scripts": "^1.1.4"
   },
   "scripts": {
